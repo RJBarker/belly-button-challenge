@@ -6,8 +6,8 @@ d3.json(url).then(function(data){
     console.log("Samples Data:", data);
 });
 
-// Init chart to be shown on load
-function init(){
+// BarChart generator function
+function genBarChart(){
 
     // Read in the JSON endpoint
     d3.json(url).then(function(data){
@@ -15,20 +15,31 @@ function init(){
         // Get the first data point from the samples key
         let chart_data = data.samples[0];
 
-            // From data point obtain required values
-            let id = chart_data.id.slice(0,10);
-            let otuIds = chart_data.otu_ids.slice(0,10);
-            let otuLabels = chart_data.otu_labels.slice(0,10);
-            let otuValues = chart_data.sample_values.slice(0,10);
-        
-        // Prefix otuIds with 'OTU'
-        let y = otuIds.map(otu => `OTU ${otu}`);
-        
-        // Map the first 10 values to the x and y
+            // Transform data
+            let id = chart_data.id;
+            let transData = [];
+            for (let i = 0; i < chart_data.otu_ids.length; i++){
+                transData.push({
+                    otu : `OTU ${chart_data.otu_ids[i]}`,
+                    label : chart_data.otu_labels[i],
+                    otuVal : chart_data.sample_values[i]
+                });
+            };
+
+            // Order by otuVal Descending
+            transData.sort((a,b) => b.otuVal - a.otuVal);
+
+            // Slice first 10 values
+            let sliced = transData.slice(0,10);
+
+            // Reverse the array to accommodate Plotly's defaults
+            let reverseSlice = sliced.reverse();    
+            
+        // Map the values to the trace object
         let trace1 = {
-            x : otuValues.reverse(),
-            y : y,
-            text : otuLabels,
+            x : reverseSlice.map(val => val.otuVal),
+            y : reverseSlice.map(val => val.otu),
+            text : reverseSlice.map(val => val.label),
             type: "bar",
             orientation : "h"
         };
@@ -38,7 +49,9 @@ function init(){
 
         // Create char title and other layout features
         let layout = {
-            title : "Top 10 OTU's"
+            margin :{
+                t: 25
+            }
         };
 
         // Generate plot
@@ -46,4 +59,4 @@ function init(){
     });
 };
 
-init();
+genBarChart();
