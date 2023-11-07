@@ -6,6 +6,26 @@ d3.json(url).then(function(data){
     console.log("Samples Data:", data);
 });
 
+// Init function
+function init(){
+
+    // Fetch the JSON
+    d3.json(url).then(function(data){
+
+        // Select the dropdown menu
+        let dd = d3.select("#selDataset");
+
+        // Append new list items for all 'names'
+        for (let i = 0; i < data.names.length; i++){
+            dd.append("option").text(data.names[i]);
+        };
+        
+        
+        
+    });
+
+};
+
 // BarChart generator function
 function genBarChart(){
 
@@ -59,4 +79,5 @@ function genBarChart(){
     });
 };
 
+init();
 genBarChart();
