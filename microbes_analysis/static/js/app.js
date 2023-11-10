@@ -6,6 +6,11 @@ d3.json(url).then(function(data){
     console.log("Samples Data:", data);
 });
 
+// Filter Data Function
+function selectIDmetadata(data){
+    return data.metadata.id == sampleID;
+};
+
 // Init function
 function init(){
 
@@ -13,36 +18,49 @@ function init(){
     d3.json(url).then(function(data){
 
         // Select the dropdown menu
-        let dd = d3.select("#selDataset");
+        let dd = d3.selectAll("#selDataset");
 
         // Append new list items for all 'names'
         for (let i = 0; i < data.names.length; i++){
-            dd.append("option").text(data.names[i]);
+            dd.append("option").attr("value", data.names[i]).text(data.names[i]);
         };
-        
-        
-        
+    
+    // Store the ID from dropdown in a variable
+    let sampleID = dd.property('value');
+
+    // console.log(sampleID);
+
+    // Use the functions to generate the plots
+    genBarChart(sampleID);
+    genDemographic(sampleID);
     });
 
 };
 
 // BarChart generator function
-function genBarChart(){
+function genBarChart(sample){
 
     // Read in the JSON endpoint
     d3.json(url).then(function(data){
         
-        // Get the first data point from the samples key
-        let chart_data = data.samples[0];
+        // Assign samples data to variable
+        let samples_data = data.samples;
 
+        // Filter the data for sample array
+        let sample_array = samples_data.filter(sd => sd.id == sample);
+
+        // Pull data from the array
+        let sampleData = sample_array[0];
+
+        console.log(sampleData);
             // Transform data
-            let id = chart_data.id;
+            //let id = chart_data.id;
             let transData = [];
-            for (let i = 0; i < chart_data.otu_ids.length; i++){
+            for (let i = 0; i < sampleData.otu_ids.length; i++){
                 transData.push({
-                    otu : `OTU ${chart_data.otu_ids[i]}`,
-                    label : chart_data.otu_labels[i],
-                    otuVal : chart_data.sample_values[i]
+                    otu : `OTU ${sampleData.otu_ids[i]}`,
+                    label : sampleData.otu_labels[i],
+                    otuVal : sampleData.sample_values[i]
                 });
             };
 
@@ -79,5 +97,32 @@ function genBarChart(){
     });
 };
 
+// DemoGraphic function generator
+function genDemographic(sample){
+    d3.json(url).then(function(data){
+
+        // Assign metadata to a variable
+        let metadata = data.metadata;
+
+        // Filter the metadata to the sample
+        let meta_array = metadata.filter(md => md.id == sample);
+
+        // Get data from array
+        let meta_data = meta_array[0];
+
+        console.log("Metadata:", meta_data);
+
+        // Select the table in the demographic panel
+        let table = d3.select(".table-sm").select("tbody");
+
+        // Loop through metadata and append to table
+        for (let meta in meta_data){
+            let newRow = table.append("tr");
+            newRow.append("th").attr("scope", "row").text(`${meta}`);
+            newRow.append("td").attr("class", "small").attr("align", "right").text(`${meta_data[meta]}`);
+        };
+
+    });
+};
+
 init();
-genBarChart();
