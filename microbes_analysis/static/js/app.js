@@ -111,6 +111,9 @@ function genDemographic(sample){
         // Select the table in the demographic panel
         let table = d3.select(".table-striped").select("tbody");
 
+        // Clear the table contents
+        table.html("");
+
         // Loop through metadata and append to table
         for (let meta in meta_data){
             let newRow = table.append("tr");
