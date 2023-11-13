@@ -6,12 +6,7 @@ d3.json(url).then(function(data){
     console.log("Samples Data:", data);
 });
 
-// Filter Data Function
-function selectIDmetadata(data){
-    return data.metadata.id == sampleID;
-};
-
-// Init function
+// Init Dashboard Load function
 function init(){
 
     // Fetch the JSON
@@ -189,6 +184,14 @@ function genBubbleChart(sample){
         // Generate plot
         Plotly.newPlot("bubble", bubData, layout);
     });
+};
+
+// Create an Event to run when the dropdown is changed
+function optionChanged(sample){
+    console.log(`Subject ID changed: ${sample}`);
+    genBarChart(sample);
+    genBubbleChart(sample);
+    genDemographic(sample);
 };
 
 init();
