@@ -151,6 +151,9 @@ function genBubbleChart(sample){
                     otuVal : sampleData.sample_values[i]
                 });
             };
+        
+        // Sort the values by otu ascending
+        transData.sort((a,b) => b.otuVal - a.otuVal);
 
         // Map the values to a trace object
         let bubTrace = {
@@ -160,7 +163,8 @@ function genBubbleChart(sample){
             marker :{
                 size: transData.map(val => (val.otuVal * 0.75)),
                 opacity : 0.75,
-                color : transData.map(val => val.otu)
+                color : transData.map(val => val.otu),
+                colorscale: "Earth"
             },
             text: transData.map(val => val.label)
         };
@@ -171,7 +175,15 @@ function genBubbleChart(sample){
         // Create layout object
         let layout = {
             showlegend:false,
-            margin: "autoexpand"
+            height: 450,
+            width: 1140,
+            margin: {
+                autoexpand:true,
+                t: 10,
+                b: 25,
+                l: 25,
+                r: 25
+            }
         };
 
         // Generate plot
