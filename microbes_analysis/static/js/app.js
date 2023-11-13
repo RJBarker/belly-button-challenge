@@ -172,6 +172,8 @@ function genBubbleChart(sample){
 
         // Create layout object
         let layout = {
+            hovermode: "y",
+            hoverdistance:1,
             showlegend:false,
             height: 450,
             width: 1140,
