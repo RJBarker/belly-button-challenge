@@ -33,6 +33,7 @@ function init(){
     // Use the functions to generate the plots
     genBarChart(sampleID);
     genDemographic(sampleID);
+    genBubbleChart(sampleID);
     });
 
 };
@@ -122,6 +123,59 @@ function genDemographic(sample){
             newRow.append("td").attr("class", "small").attr("align", "center").text(`${meta_data[meta]}`);
         };
 
+    });
+};
+
+// BubbleChart function generator
+function genBubbleChart(sample){
+    d3.json(url).then(function(data){
+
+        // Assign samples data to variable
+        let samples_data = data.samples;
+
+        // Filter the data for sample array
+        let sample_array = samples_data.filter(sd => sd.id == sample);
+
+        // Pull data from the array
+        let sampleData = sample_array[0];
+
+        console.log(sampleData);
+
+            // Transform data
+            //let id = chart_data.id;
+            let transData = [];
+            for (let i = 0; i < sampleData.otu_ids.length; i++){
+                transData.push({
+                    otu : sampleData.otu_ids[i],
+                    label : sampleData.otu_labels[i],
+                    otuVal : sampleData.sample_values[i]
+                });
+            };
+
+        // Map the values to a trace object
+        let bubTrace = {
+            x : transData.map(val => val.otu),
+            y : transData.map(val => val.otuVal),
+            mode : 'markers',
+            marker :{
+                size: transData.map(val => (val.otuVal * 0.75)),
+                opacity : 0.75,
+                color : transData.map(val => val.otu)
+            },
+            text: transData.map(val => val.label)
+        };
+
+        // Create data array
+        let bubData = [bubTrace];
+
+        // Create layout object
+        let layout = {
+            showlegend:false,
+            margin: "autoexpand"
+        };
+
+        // Generate plot
+        Plotly.newPlot("bubble", bubData, layout);
     });
 };
 
