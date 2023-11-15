@@ -108,17 +108,15 @@ function genDemographic(sample){
 
         console.log("Metadata:", meta_data);
 
-        // Select the table in the demographic panel
-        let table = d3.select(".table-striped").select("tbody");
+        // Select the sample-metadata div in the demographic panel
+        let div = d3.select("#sample-metadata");
 
-        // Clear the table contents
-        table.html("");
+        // Add small text attr and clear the div contents
+        div.attr("class","small").attr("align", "center").html("");
 
-        // Loop through metadata and append to table
+        // Loop through metadata and append to div
         for (let meta in meta_data){
-            let newRow = table.append("tr");
-            newRow.append("th").attr("scope", "row").text(`${meta}`);
-            newRow.append("td").attr("class", "small").attr("align", "center").text(`${meta_data[meta]}`);
+            div.append().html(`<b>${meta}:</b> \t ${meta_data[meta]} </br>`);
         };
 
     });
