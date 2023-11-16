@@ -45,7 +45,7 @@ function genBarChart(sample){
         let sampleData = sample_array[0];
 
         // console.log(sampleData);
-        
+
             // Transform data
             //let id = chart_data.id;
             let transData = [];
@@ -160,8 +160,8 @@ function genBubbleChart(sample){
                 color : transData.map(val => val.otu),
                 colorscale: "Earth",
                 line :{
-                    color : "grey",
-                    width : 1
+                    color : "black",
+                    width : 0.75
                 }
             },
             text: transData.map(val => val.label)
