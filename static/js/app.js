@@ -1,11 +1,6 @@
 // Endpoint URL
 const url = "https://2u-data-curriculum-team.s3.amazonaws.com/dataviz-classroom/v1.1/14-Interactive-Web-Visualizations/02-Homework/samples.json";
 
-// Fetch the JSON and log within the console
-d3.json(url).then(function(data){
-    console.log("Samples Data:", data);
-});
-
 // Init Dashboard Load function
 function init(){
 
@@ -49,7 +44,8 @@ function genBarChart(sample){
         // Pull data from the array
         let sampleData = sample_array[0];
 
-        console.log(sampleData);
+        // console.log(sampleData);
+        
             // Transform data
             //let id = chart_data.id;
             let transData = [];
@@ -107,7 +103,7 @@ function genDemographic(sample){
         // Get data from array
         let meta_data = meta_array[0];
 
-        console.log("Metadata:", meta_data);
+        //console.log("Metadata:", meta_data);
 
         // Select the sample-metadata div in the demographic panel
         let div = d3.select("#sample-metadata");
@@ -136,7 +132,7 @@ function genBubbleChart(sample){
         // Pull data from the array
         let sampleData = sample_array[0];
 
-        console.log(sampleData);
+        //console.log(sampleData);
 
             // Transform data
             //let id = chart_data.id;
@@ -158,10 +154,15 @@ function genBubbleChart(sample){
             y : transData.map(val => val.otuVal),
             mode : 'markers',
             marker :{
+                // Size is reduced by 10% to ensure markers are visible
                 size: transData.map(val => (val.otuVal * 0.9)),
                 opacity : 0.75,
                 color : transData.map(val => val.otu),
-                colorscale: "Earth"
+                colorscale: "Earth",
+                line :{
+                    color : "grey",
+                    width : 1
+                }
             },
             text: transData.map(val => val.label)
         };
@@ -272,6 +273,7 @@ function optionChanged(sample){
     genBubbleChart(sample);
     genDemographic(sample);
     genGaugeChart(sample);
+    console.log("Charts Updated!");
 };
 
 init();
