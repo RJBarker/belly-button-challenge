@@ -29,6 +29,7 @@ function init(){
     genBarChart(sampleID);
     genDemographic(sampleID);
     genBubbleChart(sampleID);
+    genGaugeChart(sampleID);
     });
 
 };
@@ -157,7 +158,7 @@ function genBubbleChart(sample){
             y : transData.map(val => val.otuVal),
             mode : 'markers',
             marker :{
-                size: transData.map(val => (val.otuVal * 0.75)),
+                size: transData.map(val => (val.otuVal * 0.9)),
                 opacity : 0.75,
                 color : transData.map(val => val.otu),
                 colorscale: "Earth"
@@ -170,7 +171,7 @@ function genBubbleChart(sample){
 
         // Create layout object
         let layout = {
-            hovermode: "y",
+            hovermode: "closest",
             hoverdistance:1,
             showlegend:false,
             height: 450,
@@ -178,10 +179,11 @@ function genBubbleChart(sample){
             margin: {
                 autoexpand:true,
                 t: 10,
-                b: 25,
+                b: 30,
                 l: 25,
                 r: 25
-            }
+            },
+            xaxis : { title: "OTU ID"}
         };
 
         // Generate plot
@@ -195,6 +197,7 @@ function optionChanged(sample){
     genBarChart(sample);
     genBubbleChart(sample);
     genDemographic(sample);
+    genGaugeChart(sample);
 };
 
 init();
